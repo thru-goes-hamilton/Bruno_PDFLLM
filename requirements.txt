@@ -1,5 +1,3 @@
-PyMuPDF
-frontend
-fitz
+PyPDF2
 llama_index
 streamlit

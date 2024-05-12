@@ -1,5 +1,5 @@
 import streamlit as st
-import fitz
+import PyPDF2
 from llama_index.llms.gradient import GradientBaseModelLLM
 from llama_index.embeddings.gradient import GradientEmbedding
 from llama_index.core import VectorStoreIndex, Settings, Document
@@ -15,11 +15,11 @@ def process_data(prompt, file):
 
     # Extract text from the uploaded PDF file
     if file is not None:
-        with fitz.open(stream=file.read(), filetype="pdf") as pdf:
-            text = ""
-            for page_num in range(len(pdf)):
-                page = pdf[page_num]
-                text += page.get_text()
+        text = ""
+        pdf_reader = PyPDF2.PdfFileReader(file)
+        for page_num in range(pdf_reader.numPages):
+            page = pdf_reader.getPage(page_num)
+            text += page.extract_text()
     else:
         text = ""
 
