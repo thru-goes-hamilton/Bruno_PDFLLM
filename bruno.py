@@ -95,8 +95,8 @@ with st.container() as container:
     # answer_placeholder.markdown(f'<div style="max-height: {max_height}; overflow-y: auto; padding: 9px 12px; margin-left: 18px; margin-right: 18px; margin-bottom: 12; color: #3C2A4D; background-color: #E0F0EA; border-radius: 10px; border: 3px solid #93ACBD">{answer}</div>', unsafe_allow_html=True)
     # , unsafe_allow_html=True)
 
-    prompt = st.chat_input("Say something")
-    # new_prompt = st.text_input("",placeholder="Enter new prompt")
+    # prompt = st.chat_input("Say something")
+    new_prompt = st.text_input("",placeholder="Enter new prompt")
 
     # new_prompt = st.empty()
     # new_prompt.markdown(
