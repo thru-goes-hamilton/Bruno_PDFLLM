@@ -2,5 +2,7 @@ PyPDF2
 llama_index
 llama-index-llms-llama-cpp 
 llama-index-embeddings-huggingface
+llama-index-core 
+llama-index-readers-file 
+llama-index-llms-ollama 
 streamlit
-
