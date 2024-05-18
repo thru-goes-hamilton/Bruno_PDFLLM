@@ -17,7 +17,7 @@ def process_data(prompt, file):
     if file is not None:
         text = ""
         pdf_reader = PyPDF2.PdfReader(file)
-        for page_num in range(pdf_reader.numPages):
+        for page_num in range(len(pdf_reader.pages)):
             page = pdf_reader.getPage(page_num)
             text += page.extract_text()
     else:
