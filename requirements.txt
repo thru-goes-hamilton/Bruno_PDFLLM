@@ -1,6 +1,6 @@
 PyPDF2
 gradientai
 llama-index
-llama-index-embeddings-langchain
+llama-index-embeddings-gradient
 llama-index-llms-gradient
 streamlit
