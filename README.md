@@ -2,9 +2,9 @@
 Bruno is an AI application that can leverage the power of **Retrieval Augmented Generation** to let the user **Chat with a PDF**. Try our Bruno and share your experience!
 
 
-<p float="left">
-  <img src="https://github.com/thru-goes-hamilton/Bruno_PDFLLM/assets/114722386/969b5942-3033-4ce6-8f4a-cb83ae2b2b32" width="500" height="300" />
-  <img src="https://github.com/thru-goes-hamilton/Bruno_PDFLLM/assets/114722386/b2f9d270-96d8-4349-9666-c336a113b129" width="500" height="300" /> 
+<p>
+  <img src="https://github.com/thru-goes-hamilton/Bruno_PDFLLM/assets/114722386/969b5942-3033-4ce6-8f4a-cb83ae2b2b32" width="400" height="240" />
+  <img src="https://github.com/thru-goes-hamilton/Bruno_PDFLLM/assets/114722386/b2f9d270-96d8-4349-9666-c336a113b129" width="400" height="240" /> 
 </p>
 
 ## Features
