@@ -5,14 +5,28 @@ from llama_index.embeddings.gradient import GradientEmbedding
 from llama_index.core import VectorStoreIndex, Settings, Document
 
 # Define initial values for variables
-prompt="Your prompt will show here"
-answer="Bruno will answer any quesitons you have about this pdf" 
+prompt = "Your prompt will show here"
+answer = "Bruno will answer any questions you have about this pdf" 
 uploaded_file = None
 max_height = 300
+upper_height = "<br>"
+lower_height = "<br>"
+explanation = """
+            <div style="text-align: center">
+                <p>Upload any PDF and chat with Bruno!!<br>Interact with PDFs by leveraging the power of RAG and LLMs.</p>
+            </div>
+            """
+
+# Initialize session state variables if they don't exist
+if "prompts" not in st.session_state:
+    st.session_state.prompts = []
+if "answers" not in st.session_state:
+    st.session_state.answers = []
+if "prompt_answer_html" not in st.session_state:
+    st.session_state.prompt_answer_html = ""
 
 # Define the processing function
 def process_data(prompt, file):
-
     # Extract text from the uploaded PDF file
     if file is not None:
         text = ""
@@ -23,9 +37,12 @@ def process_data(prompt, file):
     else:
         text = ""
 
-    
     # Set up LLM and embedding models
-    llm = GradientBaseModelLLM(base_model_slug="llama2-7b-chat", max_tokens=400, access_token="ykT7u7KHiikryOLUPIZzP3YWLb5BQEPw", workspace_id= "9d431935-abb0-40b0-9905-3cf70173157d_workspace")
+    llm = GradientBaseModelLLM(
+        base_model_slug="llama2-7b-chat", max_tokens=400, 
+        gradient_access_token=st.secrets["gradient_access_token"],
+        gradient_workspace_id=st.secrets["gradient_workspace_id"],
+    )
     embed_model = GradientEmbedding(
         gradient_access_token=st.secrets["gradient_access_token"],
         gradient_workspace_id=st.secrets["gradient_workspace_id"],
@@ -44,34 +61,33 @@ def process_data(prompt, file):
 
     # Query the engine with the provided prompt
     response = query_engine.query(prompt)
-    
-    return response.response
+    return extract_refined_answer(response.response)
 
-#Commenting out the title
-# Define the Streamlit app layout
-#st.title("BRUNO")
+def extract_refined_answer(text):
+    start_phrase = ':'
+    start_index = text.find(start_phrase)
 
-#Adding new heading here
-st.markdown("<h1 style='text-align: center; color: #E0F0EA; font-size: 36px;font-family: Merriweather;'> BRUNO</h1>",unsafe_allow_html=True)
+    # The length of the start_phrase is added to get the start of the actual refined answer.
+    start_index += len(start_phrase)
+    end_index1 = text.find('The refined answer', start_index + 1)
+    end_index2 = text.find('The original answer', start_index + 1)
+    if end_index1 != -1 and end_index2 != -1:
+        end_index = min(end_index1, end_index2)
+        refined_answer = text[start_index:end_index].strip()
+    elif end_index1 != -1:
+        refined_answer = text[start_index:end_index1].strip()
+    elif end_index2 != -1:
+        refined_answer = text[start_index:end_index2].strip()
+    else:
+        refined_answer = text[start_index:].strip()
 
-#Change here
+    return refined_answer
 
-# st.markdown(
-#     """
-#     <style>
-#     .css-2trqyj-TitleContainer {
-#         text-align: center;
-#         font-size: 36px;
-#         font-family: Merriweather;
-#         padding-top: 10px;
-#         padding-bottom: 10px;
-#         margin: 0;
-#     }
-#     </style>
-#     """,
-#     unsafe_allow_html=True
-# )
+# Placeholder for upper spacing
+upper_height_placeholder = st.markdown(upper_height, unsafe_allow_html=True)
 
+# Adding a new heading
+st.markdown("<h1 style='text-align: center; color: #E0F0EA; font-size: 36px;font-family: Merriweather;'> BRUNO</h1>", unsafe_allow_html=True)
 st.markdown(
     """
     <style>
@@ -85,26 +101,34 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-with st.container() as container:    
+# Container for the main content
+with st.container() as container:
+    # Explanation and lower spacing placeholders
+    explanation_placeholder = st.markdown(explanation, unsafe_allow_html=True)
+    lower_height_placeholder = st.markdown("<br>", unsafe_allow_html=True)
 
-    prompt_placeholder = st.empty()
-    # prompt_placeholder.markdown(f'<p style="padding: 9px 12px; margin-left: 18px; margin-right: 18px; margin-bottom: 9; color: #E0F0EA; background-color: #574F7D; border-radius: 10px;"><span style="font-weight: bold; font-size: 20px; color: black;">KU</span>&nbsp;&nbsp;{prompt}</p>', unsafe_allow_html=True)
-    # # Display the styled text using 
+    # Placeholder for displaying previous prompts and answers
+    prompt_answer_placeholder = st.empty()
+    if st.session_state.prompt_answer_html != "":
+        prompt_answer_placeholder.markdown(st.session_state.prompt_answer_html, unsafe_allow_html=True)
 
-    answer_placeholder = st.empty()
-    # answer_placeholder.markdown(f'<div style="max-height: {max_height}; overflow-y: auto; padding: 9px 12px; margin-left: 18px; margin-right: 18px; margin-bottom: 12; color: #3C2A4D; background-color: #E0F0EA; border-radius: 10px; border: 3px solid #93ACBD">{answer}</div>', unsafe_allow_html=True)
-    # , unsafe_allow_html=True)
+    # Input field for new prompt
+    new_prompt = st.text_input("", placeholder="Enter new prompt")
 
-    # prompt = st.chat_input("Say something")
-    new_prompt = st.text_input("",placeholder="Enter new prompt")
+    st.markdown(
+        """
+        <style>
+        div[data-baseweb="input"] > div {
+            background-color: #574f7d !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-    # new_prompt = st.empty()
-    # new_prompt.markdown(
-    #     f'<input type="text" style="width: 100%; max-height: {max_height}; overflow-y: auto; padding: 9px 12px; margin-top: 12px; margin-bottom: 9; color: #3C2A4D; background-color: #E0F0EA; border-radius: 10px; border: 3px solid #93ACBD" />',
-    #     unsafe_allow_html=True
-    # )
-    # Input text field to update the prompt variable
-    # new_prompt = st.text_input("Enter new prompt")    
+    # Custom CSS for file uploader
     css = '''
     <style>
         [data-testid='stFileUploader'] {
@@ -123,37 +147,36 @@ with st.container() as container:
         }
     </style>
     '''
-    
     st.markdown(css, unsafe_allow_html=True)
 
+    # File uploader for PDF files
     uploaded_file = st.file_uploader("", type="pdf", accept_multiple_files=False, key="pdf")
 
-# Button 1: Upload PDF
-    if st.button("Submit"):
+    # Submit button to process the prompt and uploaded file
+    submit_button = st.button("Submit", disabled=(uploaded_file is None or new_prompt == ""))
+    if submit_button:
+        upper_height_placeholder.empty()
+        explanation_placeholder.empty()
+        lower_height_placeholder.empty()
         if new_prompt:
             prompt = str(new_prompt)
-            prompt_placeholder.markdown(f'<p style="padding: 9px 12px; margin-left: 18px; margin-right: 18px; color: #E0F0EA; background-color:#574F7D;border-radius: 10px;"><span style="font-weight: bold; font-size: 20px; color: #E0F0EA ;">KU</span>&nbsp;&nbsp;{prompt}</p>', unsafe_allow_html=True)
+            st.session_state.prompts.append(prompt)
 
-    # Call the processing function
+        # Call the processing function
         with st.spinner("Processing..."):
-            
-            # Update prompt if a new one is entered
-        
-        
-            # Check if a file was uploaded
             if uploaded_file is not None:
                 # Process the uploaded file
                 answer = process_data(prompt, uploaded_file)
-                answer_placeholder.markdown(f'<div style="max-height: {max_height};padding: 9px 12px; margin-left: 18px; margin-right: 18px; overflow-y: auto; padding: 18px; color: #3C2A4D; background-color: #E0F0EA; border-radius: 10px; border: 3px solid #93ACBD">{answer}</div>'
-    , unsafe_allow_html=True)
-            
-                # del uploaded_file  # Delete the uploaded file object to clear memory
-            else:
-                # Process without a file            
-                answer = "Please upload a PDF file to get started."
-                answer_placeholder.markdown(f'<div style="max-height: {max_height}; padding: 9px 12px; margin-left: 18px; margin-right: 18px;  overflow-y: auto; padding: 18px; color: #3C2A4D; background-color: #E0F0EA; border-radius: 10px; border: 3px solid #93ACBD">{answer}</div>'
-    , unsafe_allow_html=True)
+                st.session_state.answers.append(answer)
+                new_prompt = ""
 
-    
-        # Display the result
-        st.success("Processing complete!")
+            # Generate HTML for the new prompt and answer
+            new_prompt_answer_html = ""
+            new_prompt_answer_html += f'<p style="padding: 9px 12px; margin-left: 18px; margin-right: 18px; color: #E0F0EA; background-color:#574F7D;border-radius: 10px;"><span style="font-weight: bold; font-size: 20px; color: #E0F0EA ;">KU</span>&nbsp;&nbsp;{st.session_state.prompts[-1]}</p>'
+            new_prompt_answer_html += f'<div style="max-height:500px; padding: 9px 12px; margin-left: 18px; margin-right: 18px; margin-bottom: 36px; overflow-y: auto; padding: 18px; color: #3C2A4D; background-color: #E0F0EA; border-radius: 10px; border: 3px solid #93ACBD">{st.session_state.answers[-1]}</div>'
+
+            # Append the new content to the existing content
+            st.session_state.prompt_answer_html += new_prompt_answer_html
+
+            # Display the updated content
+            prompt_answer_placeholder.markdown(st.session_state.prompt_answer_html, unsafe_allow_html=True)
