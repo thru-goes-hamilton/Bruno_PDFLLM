@@ -1,6 +1,6 @@
 # Bruno_PDFLLM
 Bruno is an AI application that can leverage the power of **Retrieval Augmented Generation** to let the user **Chat with a PDF**. <br>
-Try out Bruno and share your experience!
+Try out Bruno and share your experience!!
 [Bruno](brunopdf.streamlit.app)
 
 
