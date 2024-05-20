@@ -25,6 +25,8 @@ if "answers" not in st.session_state:
 if "prompt_answer_html" not in st.session_state:
     st.session_state.prompt_answer_html = ""
 
+
+
 # Define the processing function
 def process_data(prompt, file):
     # Extract text from the uploaded PDF file
@@ -113,7 +115,7 @@ with st.container() as container:
         prompt_answer_placeholder.markdown(st.session_state.prompt_answer_html, unsafe_allow_html=True)
 
     # Input field for new prompt
-    new_prompt = st.text_input("", placeholder="Enter new prompt",key="input")
+    new_prompt = st.text_input("", placeholder="Enter new prompt")
 
     st.markdown(
         """
@@ -168,7 +170,7 @@ with st.container() as container:
                 # Process the uploaded file
                 answer = process_data(prompt, uploaded_file)
                 st.session_state.answers.append(answer)
-                st.session_state["input"] = ""
+                
 
             # Generate HTML for the new prompt and answer
             new_prompt_answer_html = ""
