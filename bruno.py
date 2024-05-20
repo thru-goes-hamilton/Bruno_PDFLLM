@@ -40,8 +40,8 @@ def process_data(prompt, file):
     # Set up LLM and embedding models
     llm = GradientBaseModelLLM(
         base_model_slug="llama2-7b-chat", max_tokens=400, 
-        gradient_access_token=st.secrets["gradient_access_token"],
-        gradient_workspace_id=st.secrets["gradient_workspace_id"],
+        access_token=st.secrets["gradient_access_token"],
+        workspace_id=st.secrets["gradient_workspace_id"],
     )
     embed_model = GradientEmbedding(
         gradient_access_token=st.secrets["gradient_access_token"],
