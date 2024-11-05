@@ -1,8 +1,8 @@
 # Bruno_PDFLLM
-Bruno is an AI application that can leverage the power of **Retrieval Augmented Generation** to let the user **Chat with a PDF**. <br>
-Try out Bruno and share your experience!!
-[Bruno](brunopdf.streamlit.app)
+![Discontinued](https://img.shields.io/badge/Status-Discontinued-red)
+<br>Check out Bruno_V2 instead: [Bruno_V2](https://github.com/thru-goes-hamilton/Bruno_V2)<br>
 
+Bruno is an AI application that can leverage the power of **Retrieval Augmented Generation** to let the user **Chat with a PDF**. <br>
 
 <p>
   <img src="https://github.com/thru-goes-hamilton/Bruno_PDFLLM/assets/114722386/969b5942-3033-4ce6-8f4a-cb83ae2b2b32" width="400" height="240" />
@@ -41,10 +41,6 @@ Retrieval Augmented Generation (RAG) combines the capabilities of a **large lang
 - Custom UI/UX for Chatbot
 - Built using the Streamlit framework
 - State management to display multiple prompts and answer
-  
-<br>
-Working on Bruno 2.0...
-<br>
 
 ## Upcoming features in Bruno 2.0
 - Exploring model architectures for handling retrieval of image and tabular data from pdfs
