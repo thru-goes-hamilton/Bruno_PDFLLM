@@ -1,4 +1,4 @@
-# Bruno_PDFLLM
+# Bruno_V1
 ![Discontinued](https://img.shields.io/badge/Status-Discontinued-red)
 <br>Check out Bruno_V2 instead: [Bruno_V2](https://github.com/thru-goes-hamilton/Bruno_V2)<br>
 
